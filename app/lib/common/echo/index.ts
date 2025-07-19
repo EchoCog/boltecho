@@ -74,11 +74,15 @@ export {
   type DeepTreeEchoCharacter
 } from './character-config';
 
-// Utility functions for integration
+// Utility functions for integration  
 export function initializeEchoSystem(config?: {
   networkConfig?: Partial<import('./echo-state-network').DeepTreeEchoConfig>;
   resetGestalt?: boolean;
 }) {
+  // Import local functions
+  const { resetGestalt, getGestaltState } = require('./cognitive-architecture');
+  const { getGlobalNetwork } = require('./echo-state-network');
+  
   // Initialize or reset gestalt state if requested
   if (config?.resetGestalt) {
     resetGestalt();
@@ -104,14 +108,18 @@ export function initializeEchoSystem(config?: {
 }
 
 export function processEchoQuery(query: string): {
-  cognitive: ReturnType<typeof echoCompute>;
-  neural: ReturnType<typeof processText>;
+  cognitive: ReturnType<typeof import('./cognitive-architecture').echoCompute>;
+  neural: ReturnType<typeof import('./echo-state-network').processText>;
   combined: {
     interpretation: string;
     confidence: number;
     patterns: string[];
   };
 } {
+  // Import local functions
+  const { echoCompute } = require('./cognitive-architecture');
+  const { processText } = require('./echo-state-network');
+  
   // Process through cognitive architecture
   const cognitive = echoCompute(query);
   
@@ -145,6 +153,10 @@ export const ECHO_BUILD = 'TypeScript-Implementation-2024';
 
 // Export system status
 export function getEchoSystemStatus() {
+  // Import local functions
+  const { getGestaltState } = require('./cognitive-architecture');
+  const { getGlobalNetwork } = require('./echo-state-network');
+  
   const gestaltState = getGestaltState();
   const network = getGlobalNetwork();
   const networkInfo = network.getNetworkInfo();
